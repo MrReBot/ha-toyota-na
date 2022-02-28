@@ -99,11 +99,12 @@ async def update_vehicles_status(client: ToyotaOneClient, entry: ConfigEntry):
         vehicles = {v["vin"]: {"info": v} for v in vehicles}
         for vin, vehicle in vehicles.items():
             if vehicle["info"]["remoteSubscriptionStatus"] != 'ACTIVE':
-                continue
-            try:
-                vehicle["status"] = await client.get_vehicle_status(vin)
-            except Exception as e:
-                _LOGGER.warn("Error fetching vehicle status")
+                vehicle["status"] = {"vehicleStatus": []}
+            else:
+                try:
+                    vehicle["status"] = await client.get_vehicle_status(vin)
+                except Exception as e:
+                    _LOGGER.warn("Error fetching vehicle status")
             try:
                 vehicle["health_status"] = await client.get_vehicle_health_status(vin)
             except Exception as e:
