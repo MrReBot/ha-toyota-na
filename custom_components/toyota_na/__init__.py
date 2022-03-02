@@ -99,7 +99,7 @@ async def update_vehicles_status(client: ToyotaOneClient, entry: ConfigEntry):
         vehicles = {v["vin"]: {"info": v} for v in vehicles}
         for vin, vehicle in vehicles.items():
             if vehicle["info"]["remoteSubscriptionStatus"] != 'ACTIVE':
-                vehicle["status"] = {"vehicleStatus": []}
+                vehicle["status"] = {"vehicleStatus":[],"tripA":{"value":-1,"unit":"mi","displayName":"tripA"},"tripB":{"value":-1,"unit":"mi","displayName":"tripB"},"distanceToEmpty":{"value":-1,"unit":"mi","displayName":"distanceToEmpty"}}
             else:
                 try:
                     vehicle["status"] = await client.get_vehicle_status(vin)
